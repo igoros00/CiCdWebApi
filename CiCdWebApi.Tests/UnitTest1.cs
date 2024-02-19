@@ -13,5 +13,11 @@ namespace CiCdWebApi.Tests
         {
             Assert.True(2 == 2);
         }
+
+        [Fact]
+        public void Test3()
+        {
+            Assert.True(3 == 2);
+        }
     }
 }
