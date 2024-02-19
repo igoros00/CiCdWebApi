@@ -23,3 +23,5 @@ jobs:
   - name: Build app
     run: dotnet build -c Release --no-restore  # run in Release (vs Debug), no need to restore (done above)
 
+  - name: Run automated tests
+    run: dotnet test -c Release --no-build  # built on previous step, can skip
