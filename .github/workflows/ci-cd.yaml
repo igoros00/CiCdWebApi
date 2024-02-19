@@ -1,0 +1,25 @@
+name: Continuous Integrtion and Deployment  # any custom name
+
+on:
+ push:
+  branches:
+  - master  # can be customized
+  
+jobs:
+ build:
+  runs-on: ubuntu-latest  # linux vm
+  steps:  # here matrix of steps/environments can be applied 
+  - name: Check out code  # any custom name
+    uses: actions/checkout@v4  # get from action use description on website
+  
+  - name: Setup .Net 6  # custom name
+    uses: actions/setup-dotnet@v4
+    with:
+      dotnet-version: '6.0.x'  # shall correspond to project runtime spesified
+
+  - name: Restore dependencies
+    run: dotnet restore  # run shell/bash command
+
+  - name: Build app
+    run: dotnet build -c Release --no-restore  # run in Release (vs Debug), no need to restore (done above)
+
