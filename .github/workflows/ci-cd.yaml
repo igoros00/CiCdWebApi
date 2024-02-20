@@ -8,7 +8,6 @@ on:
 env:
   DOTNET_VERSION: '6.0.x'  # shall correspond to project runtime spesified
   AZURE_WEBAPP_NAME: CiCdWebApi00  # Azure Web App name (not servise plan)
-  AZURE_WEBAPP_PACKAGE_PATH: '.'  # set this to the path to your web app project, defaults to the repository root
   
 jobs:
  build:
@@ -32,11 +31,11 @@ jobs:
     run: dotnet test -c Release --no-build  # built on previous step, can skip
 
   - name: Publish app
-    run: dotnet publish -c Release --property:PublishDir='${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'  # specify output directory "/myapp" 
+    run: dotnet publish -c Release -o ./out  # specify output directory "./out" 
 
   - name: Deploy to Azure Web Apps
     uses: azure/webapps-deploy@v3  # check current version
     with:
      app-name: ${{ env.AZURE_WEBAPP_NAME }}  
      publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_SECRET }}  # Github/Secrets/Actions
-     package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp  # corresponds to output of Publish step
+     package: ./out  # corresponds to output of Publish step
