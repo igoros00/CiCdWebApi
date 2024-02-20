@@ -4,6 +4,10 @@ on:
  push:
   branches:
   - master  # can be customized
+
+env:
+  DOTNET_VERSION: '6.0.x'  # shall correspond to project runtime spesified
+  AZURE_WEBAPP_NAME: CiCdWebApi00  # Azure Web App name (not servise plan)
   
 jobs:
  build:
@@ -15,7 +19,7 @@ jobs:
   - name: Setup .Net 6  # custom name
     uses: actions/setup-dotnet@v4
     with:
-      dotnet-version: '6.0.x'  # shall correspond to project runtime spesified
+      dotnet-version: ${{ env.DOTNET_VERSION }}  
 
   - name: Restore dependencies
     run: dotnet restore  # run shell/bash command
@@ -25,3 +29,13 @@ jobs:
 
   - name: Run automated tests
     run: dotnet test -c Release --no-build  # built on previous step, can skip
+
+  - name: Publish app
+    run: dotnet publish -c Release -o ./out  # specify output directory "./out" 
+
+  - name: Deploy to Azure Web Apps
+    uses: azure/webapps-deploy@v3  # check current version
+    with:
+     app-name: ${{ env.AZURE_WEBAPP_NAME }}  
+     publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_SECRET }}  # Github/Secrets/Actions
+     package: ./out  # corresponds to output of Publish step
