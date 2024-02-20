@@ -39,4 +39,4 @@ jobs:
     with:
      app-name: ${{ env.AZURE_WEBAPP_NAME }}  
      publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_SECRET }}  # Github/Secrets/Actions
-     package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'  # corresponds to output of Publish step
+     package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp  # corresponds to output of Publish step
